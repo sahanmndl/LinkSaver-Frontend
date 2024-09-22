@@ -14,7 +14,7 @@ interface Link {
 
 const LinkCard: React.FC<Link> = ({id, title, description, domain, url, image, tags}) => {
     return (
-        <Card key={id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <Card key={id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
             <img src={image} alt={title} className="w-full h-40 object-cover" />
             <CardContent className="p-4">
                 <h2 className="text-lg font-semibold mb-2 line-clamp-1">{title}</h2>

@@ -58,7 +58,7 @@ export const addLink = async ({title, description, url, tags}: AddLinkRequest) =
 
 export const updateLink = async ({linkId, title, description, url, tags}: UpdateLinkRequest) => {
     try {
-        const response = await linkAPI.put<ApiResponse<Link>>('/', {linkId, title, description, url, tags});
+        const response = await linkAPI.put<ApiResponse<Link>>('', {linkId, title, description, url, tags});
         return response.data.body;
     } catch (error) {
         throw error;
@@ -67,7 +67,7 @@ export const updateLink = async ({linkId, title, description, url, tags}: Update
 
 export const getLinks = async ({page, limit, sortBy, sortOrder}: GetLinksRequest) => {
     try {
-        const response = await linkAPI.get<ApiResponse<GetLinksResponse>>('/', {
+        const response = await linkAPI.get<ApiResponse<GetLinksResponse>>('', {
             params: {
                 page,
                 limit,
