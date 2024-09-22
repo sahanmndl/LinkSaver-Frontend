@@ -13,11 +13,11 @@ import {API_ERROR_RESPONSE} from "@/api/base.ts";
 import {CircularProgress} from "@mui/material";
 import {Alert, AlertDescription} from "@/components/ui/alert.tsx";
 import {isValidUrl} from "@/utils/strings.ts";
+import {usePaginationStore} from "@/store/zustand.ts";
 
 interface AddLinkDialogProps {
     isAddLinkOpen: boolean
     setIsAddLinkOpen: (isOpen: boolean) => void
-    onAddLink: (linkData: AddLinkFormData) => void
 }
 
 interface AddLinkFormData {
@@ -29,6 +29,7 @@ interface AddLinkFormData {
 
 const AddLinkDialog: React.FC<AddLinkDialogProps> = ({isAddLinkOpen, setIsAddLinkOpen}) => {
     const queryClient = useQueryClient();
+    const {setIsLinkCreated} = usePaginationStore();
     const [newLink, setNewLink] = useState<AddLinkFormData>({url: '', title: '', description: '', tags: []})
     const [isTagDialogOpen, setIsTagDialogOpen] = useState(false)
     const [error, setError] = useState('');
@@ -43,28 +44,39 @@ const AddLinkDialog: React.FC<AddLinkDialogProps> = ({isAddLinkOpen, setIsAddLin
         setNewLink(prev => ({...prev, tags: selectedTags}));
     }
 
-    const checkFormValidity = () => {
+    const isSubmitButtonDisabled = () => {
         return newLink.url.trim() === '' || newLink.tags.length <= 0 || newLink.tags.length > 5;
     }
-    
-    const createNewLink = async () => {
+
+    const checkFormValidity = () => {
         if (newLink.url.trim() === '') {
-            setError('URL is empty!')
-        } else if (!isValidUrl(newLink.url)) {
-            setError('Please enter a valid URL!')
-        } else if (newLink.tags.length === 0 || newLink.tags.length > 5) {
-            setError('Please select 1 to 5 tags!')
-        } else {
-            await addLink(newLink)
+            setError('URL is empty!');
+            return false;
         }
-    }
+        if (!isValidUrl(newLink.url)) {
+            setError('Please enter a valid URL!');
+            return false;
+        }
+        if (newLink.tags.length === 0 || newLink.tags.length > 5) {
+            setError('Please select 1 to 5 tags!');
+            return false;
+        }
+        return true;
+    };
+
+    const createNewLink = async () => {
+        await addLink(newLink);
+    };
 
     const mutation = useMutation({
         mutationFn: () => createNewLink(),
         onSuccess: () => {
             setNewLink({url: '', title: '', description: '', tags: []});
             setIsAddLinkOpen(false);
-            queryClient.invalidateQueries();
+            setIsLinkCreated(true);
+            queryClient.invalidateQueries({
+                queryKey: ['links']
+            });
         },
         onError: (e: API_ERROR_RESPONSE) => {
             setError(e.response.data.error);
@@ -81,7 +93,7 @@ const AddLinkDialog: React.FC<AddLinkDialogProps> = ({isAddLinkOpen, setIsAddLin
                     <div>
                         {error && (
                             <Alert variant="destructive" className="mb-4">
-                                <AlertCircle className="h-4 w-4" />
+                                <AlertCircle className="h-4 w-4"/>
                                 <AlertDescription>{error}</AlertDescription>
                             </Alert>
                         )}
@@ -141,12 +153,16 @@ const AddLinkDialog: React.FC<AddLinkDialogProps> = ({isAddLinkOpen, setIsAddLin
                             <Button type="button" variant="outline" onClick={() => setIsAddLinkOpen(false)}>
                                 Cancel
                             </Button>
-                            <Button 
-                                type="submit" 
-                                disabled={checkFormValidity() || mutation.isPending} 
-                                onClick={() => mutation.mutate()}
+                            <Button
+                                type="submit"
+                                disabled={isSubmitButtonDisabled() || mutation.isPending}
+                                onClick={() => {
+                                    if (checkFormValidity()) {
+                                        mutation.mutate()
+                                    }
+                                }}
                             >
-                                {mutation.isPending ? <CircularProgress /> : "Add Link"}
+                                {mutation.isPending ? <CircularProgress/> : "Add Link"}
                             </Button>
                         </DialogFooter>
                     </div>
