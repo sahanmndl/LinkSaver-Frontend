@@ -62,7 +62,7 @@ const HomePage: React.FC = () => {
                         {allLinks.map((link, index) => (
                             <div key={index} ref={index === allLinks.length - 1 ? lastLinkElementRef : null}>
                                 <LinkCard
-                                    id={link._id}
+                                    _id={link._id}
                                     title={link.title}
                                     description={link.description}
                                     image={link.image}
