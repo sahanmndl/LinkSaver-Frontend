@@ -18,7 +18,7 @@ export const usePaginationStore = create<PaginationState>((set) => ({
     page: 1,
     setPage: (page: number) => set({page}),
     updatePage: (updater) => set((state) => ({page: updater(state.page)})),
-    limit: 24,
+    limit: 12,
     setLimit: (limit: number) => set({limit}),
     sortBy: 'createdAt',
     setSortBy: (sortBy: string) => set({sortBy}),
