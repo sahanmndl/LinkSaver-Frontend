@@ -37,6 +37,7 @@ interface GetLinksRequest {
 export interface GetLinksResponse {
     links: Link[];
     hasMore: boolean;
+    pages: number;
 }
 
 interface GetLinksWithTagsRequest {

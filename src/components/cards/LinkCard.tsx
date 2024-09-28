@@ -2,9 +2,11 @@ import React, {useState} from "react";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Edit, ExternalLink, Eye} from "lucide-react";
+import {Edit, ExternalLink, Eye, Trash2} from "lucide-react";
 import {truncateUrl} from "@/utils/strings.ts";
 import LinkInfoDialog from "@/components/dialogs/LinkInfoDialog.tsx";
+import EditLinkDialog from "@/components/dialogs/EditLinkDialog.tsx";
+import DeleteLinkDialog from "@/components/dialogs/DeleteLinkDialog.tsx";
 
 interface Link {
     _id: string
@@ -18,7 +20,9 @@ interface Link {
 
 const LinkCard: React.FC<Link> = (props) => {
     const {_id, title, description, url, domain, image, tags} = props
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     return (
         <>
@@ -52,26 +56,44 @@ const LinkCard: React.FC<Link> = (props) => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => setIsDialogOpen(true)}
-                            aria-label="View link details"
+                            onClick={() => setIsViewDialogOpen(true)}
+                            aria-label="View link"
                         >
                             <Eye className="h-4 w-4"/>
                         </Button>
                         <Button
                             variant="ghost"
                             size="icon"
-                            //onClick={() => onEdit(id)}
+                            onClick={() => setIsEditDialogOpen(true)}
                             aria-label="Edit link"
                         >
                             <Edit className="h-4 w-4"/>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setIsDeleteDialogOpen(true)}
+                            aria-label="Delete link"
+                        >
+                            <Trash2 className="h-4 w-4"/>
                         </Button>
                     </div>
                 </CardContent>
             </Card>
             <LinkInfoDialog
-                isOpen={isDialogOpen}
-                onClose={() => setIsDialogOpen(false)}
+                isOpen={isViewDialogOpen}
+                onClose={() => setIsViewDialogOpen(false)}
                 link={props}
+            />
+            <EditLinkDialog
+                isOpen={isEditDialogOpen}
+                onClose={() => setIsEditDialogOpen(false)}
+                link={props}
+            />
+            <DeleteLinkDialog
+                isOpen={isDeleteDialogOpen}
+                onClose={() => setIsDeleteDialogOpen(false)}
+                linkId={_id}
             />
         </>
     )
