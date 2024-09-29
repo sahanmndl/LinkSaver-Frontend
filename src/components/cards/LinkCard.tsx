@@ -8,7 +8,7 @@ import LinkInfoDialog from "@/components/dialogs/LinkInfoDialog.tsx";
 import EditLinkDialog from "@/components/dialogs/EditLinkDialog.tsx";
 import DeleteLinkDialog from "@/components/dialogs/DeleteLinkDialog.tsx";
 
-interface Link {
+interface LinkCardProps {
     _id: string
     title: string
     url: string
@@ -16,10 +16,11 @@ interface Link {
     description: string
     image: string
     tags: string[]
+    showEditAndDelete?: boolean
 }
 
-const LinkCard: React.FC<Link> = (props) => {
-    const {_id, title, description, url, domain, image, tags} = props
+const LinkCard: React.FC<LinkCardProps> = (props) => {
+    const {_id, title, description, url, domain, image, tags, showEditAndDelete = true} = props
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -61,34 +62,38 @@ const LinkCard: React.FC<Link> = (props) => {
                         >
                             <Eye className="h-4 w-4"/>
                         </Button>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setIsEditDialogOpen(true)}
-                            aria-label="Edit link"
-                        >
-                            <Edit className="h-4 w-4"/>
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setIsDeleteDialogOpen(true)}
-                            aria-label="Delete link"
-                        >
-                            <Trash2 className="h-4 w-4"/>
-                        </Button>
+                        {showEditAndDelete && (
+                            <>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => setIsEditDialogOpen(true)}
+                                    aria-label="Edit link"
+                                >
+                                    <Edit className="h-4 w-4"/>
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => setIsDeleteDialogOpen(true)}
+                                    aria-label="Delete link"
+                                >
+                                    <Trash2 className="h-4 w-4"/>
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </CardContent>
             </Card>
             <LinkInfoDialog
                 isOpen={isViewDialogOpen}
                 onClose={() => setIsViewDialogOpen(false)}
-                link={props}
+                link={{_id, title, description, image, url, domain, tags}}
             />
             <EditLinkDialog
                 isOpen={isEditDialogOpen}
                 onClose={() => setIsEditDialogOpen(false)}
-                link={props}
+                link={{_id, title, description, image, url, domain, tags}}
             />
             <DeleteLinkDialog
                 isOpen={isDeleteDialogOpen}

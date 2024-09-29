@@ -48,6 +48,12 @@ interface GetLinksWithTagsRequest {
     sortOrder: string
 }
 
+export interface DomainGroup {
+    domain: string;
+    count: number;
+    links: Link[];
+}
+
 export const addLink = async ({title, description, url, tags}: AddLinkRequest) => {
     try {
         const response = await linkAPI.post<ApiResponse<Link>>('/', {title, description, url, tags});
@@ -84,7 +90,12 @@ export const getLinks = async ({page, limit, sortBy, sortOrder}: GetLinksRequest
 
 export const getLinksGroupedByDomain = async ({fromDate, tillDate}: { fromDate: string; tillDate: string }) => {
     try {
-        const response = await linkAPI.get<ApiResponse<Link[]>>('/group/domain', {params: {fromDate, tillDate}});
+        const response = await linkAPI.get<ApiResponse<DomainGroup[]>>('/group/domain', {
+            params: {
+                fromDate,
+                tillDate
+            }
+        });
         return response.data.body;
     } catch (error) {
         throw error;
