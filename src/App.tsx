@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage.tsx";
 import LandingPage from "@/pages/LandingPage.tsx";
 import PrivateRoute from "@/routes/PrivateRoute.tsx";
 import AuthRoute from "@/routes/AuthRoute.tsx";
+import GroupedLinksPage from "@/pages/GroupedLinksPage.tsx";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route element={<PrivateRoute/>}>
                     <Route path="/home" element={<HomePage/>}/>
+                    <Route path="/grouped" element={<GroupedLinksPage/>}/>
                 </Route>
                 <Route path="*" element={<AuthRoute/>}/>
             </Routes>

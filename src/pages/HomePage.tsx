@@ -7,10 +7,11 @@ import {CircularProgress} from "@mui/material";
 import {usePaginationStore} from "@/store/zustand.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {ChevronLeft, ChevronRight} from "lucide-react";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
 
 const HomePage: React.FC = () => {
-    const {page, setPage, limit, sortBy, sortOrder} = usePaginationStore();
+    const {page, setPage, limit, sortBy, setSortBy, sortOrder, setSortOrder} = usePaginationStore();
 
     const {data: linksData, isLoading: linksLoading, error: linksError} =
         useQuery<GetLinksResponse, Error>({
@@ -27,10 +28,31 @@ const HomePage: React.FC = () => {
         setPage(newPage)
     }
 
+    const handleSortChange = (value: string) => {
+        const [newSortBy, newSortOrder] = value.split('-')
+        setSortBy(newSortBy as 'createdAt' | 'title' | 'visits')
+        setSortOrder(newSortOrder as 'asc' | 'desc')
+    }
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <Header/>
             <main className="container mx-auto px-4 py-8">
+                <div className="mb-6 flex justify-end">
+                    <Select onValueChange={handleSortChange} defaultValue={`${sortBy}-${sortOrder}`}>
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Sort by"/>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="createdAt-desc">Date Created (Newest)</SelectItem>
+                            <SelectItem value="createdAt-asc">Date Created (Oldest)</SelectItem>
+                            <SelectItem value="title-asc">Title (A-Z)</SelectItem>
+                            <SelectItem value="title-desc">Title (Z-A)</SelectItem>
+                            <SelectItem value="visits-desc">Most Visited</SelectItem>
+                            <SelectItem value="visits-asc">Least Visited</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
                 {linksLoading ?
                     <div className="flex justify-center mt-8">
                         <CircularProgress/>
@@ -52,6 +74,7 @@ const HomePage: React.FC = () => {
                                                 url={link.url}
                                                 domain={link.domain}
                                                 tags={link.tags}
+                                                visits={link.visits}
                                             />
                                         </div>
                                     ))}
