@@ -10,6 +10,7 @@ export interface Link {
     description: string
     image: string
     tags: string[]
+    visits: number
 }
 
 interface AddLinkRequest {
@@ -127,4 +128,13 @@ export const deleteLinkById = async ({linkId}: { linkId: string }) => {
         throw error;
     }
 };
+
+export const incrementLinkVisitCount = async ({linkId}: { linkId: string }) => {
+    try {
+        const response = await linkAPI.put(`/visits/${linkId}`);
+        return response.data.body;
+    } catch (error) {
+        throw error;
+    }
+}
 

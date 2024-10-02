@@ -74,6 +74,7 @@ const HomePage: React.FC = () => {
                                                 url={link.url}
                                                 domain={link.domain}
                                                 tags={link.tags}
+                                                visits={link.visits}
                                             />
                                         </div>
                                     ))}

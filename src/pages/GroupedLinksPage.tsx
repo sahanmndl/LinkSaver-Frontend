@@ -126,6 +126,7 @@ const GroupedLinksPage: React.FC = () => {
                                                             url={link.url}
                                                             domain={link.domain}
                                                             tags={link.tags}
+                                                            visits={link.visits}
                                                             showEditAndDelete={false}
                                                         />
                                                     ))}
