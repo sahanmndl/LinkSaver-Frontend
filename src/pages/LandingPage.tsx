@@ -1,11 +1,28 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Button} from "@/components/ui/button"
 import {Link, Bookmark, Share2, Search} from 'lucide-react'
 import FeatureCard from "@/components/cards/FeatureCard.tsx";
+import {getUser, isAuthenticated} from "@/utils/auth.ts";
 
 const LandingPage: React.FC = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const autoRedirectUser = async () => {
+        try {
+            const isAuth = await isAuthenticated();
+            const user = getUser();
+            if (isAuth && user) {
+                navigate("/home", {replace: true});
+            }
+        } catch (e) {
+            console.error("Redirection auth error: ", e);
+        }
+    }
+
+    useEffect(() => {
+        autoRedirectUser();
+    }, [])
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">

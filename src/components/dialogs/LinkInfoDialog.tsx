@@ -5,6 +5,7 @@ import {Link} from "@/api/link.ts";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Check, Copy} from "lucide-react";
+import {formatDateToLocalTZ} from "@/utils/dates.ts";
 
 interface LinkInfoDialogProps {
     isOpen: boolean
@@ -42,7 +43,10 @@ const LinkInfoDialog: React.FC<LinkInfoDialogProps> = ({isOpen, onClose, link}) 
                                     {link.url}
                                 </a>
                             </div>
-                            <div className="flex justify-end">
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-600">
+                                    Added on {formatDateToLocalTZ(link.createdAt || "")}
+                                </span>
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger asChild>

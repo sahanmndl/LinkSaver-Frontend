@@ -17,6 +17,8 @@ function App() {
                 <Route element={<PrivateRoute/>}>
                     <Route path="/home" element={<HomePage/>}/>
                     <Route path="/grouped" element={<GroupedLinksPage/>}/>
+                    {/*<Route path="/collections" element={<CollectionsPage/>}/>*/}
+                    {/*<Route path="/collections/:collectionId" element={<CollectionDetailPage/>}/>*/}
                 </Route>
                 <Route path="*" element={<AuthRoute/>}/>
             </Routes>
