@@ -19,11 +19,12 @@ interface LinkCardProps {
     image: string
     tags: string[]
     visits: number
+    createdAt?: string
     showEditAndDelete?: boolean
 }
 
 const LinkCard: React.FC<LinkCardProps> = (props) => {
-    const {_id, title, description, url, domain, image, tags, visits, showEditAndDelete = true} = props
+    const {_id, title, description, url, domain, image, tags, visits, createdAt, showEditAndDelete = true} = props
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -115,7 +116,7 @@ const LinkCard: React.FC<LinkCardProps> = (props) => {
             <LinkInfoDialog
                 isOpen={isViewDialogOpen}
                 onClose={() => setIsViewDialogOpen(false)}
-                link={{_id, title, description, image, url, domain, tags, visits}}
+                link={{_id, title, description, image, url, domain, tags, visits, createdAt}}
             />
             <EditLinkDialog
                 isOpen={isEditDialogOpen}

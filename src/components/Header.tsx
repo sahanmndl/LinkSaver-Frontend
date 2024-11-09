@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
-import {Search, Plus, Grid, FolderOpen} from "lucide-react"
+import {Search, Plus, Grid} from "lucide-react"
 import AddLinkDialog from "@/components/dialogs/AddLinkDialog.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -20,7 +20,8 @@ const Header = () => {
                     LinkSaver
                 </h1>
                 <div className="flex items-center space-x-4">
-                    <div className={`relative ${searchExpanded ? 'w-64' : 'w-8'} transition-all duration-300`}>
+                    <div hidden={true}
+                         className={`relative ${searchExpanded ? 'w-64' : 'w-8'} transition-all duration-300`}>
                         <Input
                             type="text"
                             placeholder="Search links..."
@@ -42,14 +43,14 @@ const Header = () => {
                     >
                         <Grid className="h-4 w-4"/>
                     </Button>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => navigate('/collections')}
-                        title="View Link Collections"
-                    >
-                        <FolderOpen className="h-4 w-4"/>
-                    </Button>
+                    {/*<Button*/}
+                    {/*    variant="outline"*/}
+                    {/*    size="icon"*/}
+                    {/*    onClick={() => navigate('/collections')}*/}
+                    {/*    title="View Link Collections"*/}
+                    {/*>*/}
+                    {/*    <FolderOpen className="h-4 w-4"/>*/}
+                    {/*</Button>*/}
                     <Button onClick={() => setIsAddLinkOpen(true)} size="icon">
                         <Plus className="h-4 w-4"/>
                     </Button>

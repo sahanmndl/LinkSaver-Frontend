@@ -11,6 +11,7 @@ export interface Link {
     image: string
     tags: string[]
     visits: number
+    createdAt?: string
 }
 
 interface AddLinkRequest {

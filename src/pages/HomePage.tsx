@@ -1,12 +1,10 @@
-import React from 'react'
+import React, {BaseSyntheticEvent} from 'react'
 import Header from "@/components/Header.tsx";
 import LinkCard from "@/components/cards/LinkCard.tsx";
 import {getLinks, GetLinksResponse} from "@/api/link.ts";
 import {useQuery} from "@tanstack/react-query";
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, Pagination} from "@mui/material";
 import {usePaginationStore} from "@/store/zustand.ts";
-import {Button} from "@/components/ui/button.tsx";
-import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
 
@@ -24,8 +22,9 @@ const HomePage: React.FC = () => {
             })
         });
 
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage)
+    const handlePageChange = (_event: BaseSyntheticEvent, newPage: number) => {
+        setPage(newPage);
+        window.scrollTo(0, 0);
     }
 
     const handleSortChange = (value: string) => {
@@ -75,38 +74,22 @@ const HomePage: React.FC = () => {
                                                 domain={link.domain}
                                                 tags={link.tags}
                                                 visits={link.visits}
+                                                createdAt={link.createdAt}
                                             />
                                         </div>
                                     ))}
                                 </div>
                                 <div className="flex justify-center items-center space-x-2 mt-8">
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => handlePageChange(page - 1)}
-                                        disabled={page === 1 || linksLoading}
-                                    >
-                                        <ChevronLeft className="h-4 w-4"/>
-                                    </Button>
-                                    {Array.from({length: linksData.pages}, (_, i) => i + 1).map((pageNumber) => (
-                                        <Button
-                                            key={pageNumber}
-                                            variant={pageNumber === page ? "default" : "outline"}
-                                            size="icon"
-                                            onClick={() => handlePageChange(pageNumber)}
-                                            disabled={linksLoading}
-                                        >
-                                            {pageNumber}
-                                        </Button>
-                                    ))}
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => handlePageChange(page + 1)}
-                                        disabled={page === linksData.pages || linksLoading}
-                                    >
-                                        <ChevronRight className="h-4 w-4"/>
-                                    </Button>
+                                    <Pagination
+                                        color="standard"
+                                        variant="outlined"
+                                        shape="rounded"
+                                        count={linksData.pages}
+                                        page={page}
+                                        onChange={(event, page) => handlePageChange(event, page)}
+                                        showFirstButton
+                                        showLastButton
+                                    />
                                 </div>
                             </>
                 }
